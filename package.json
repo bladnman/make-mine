@@ -27,12 +27,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/YOUR_USERNAME/make-mine.git"
+    "url": "git+https://github.com/bladnman/make-mine"
   },
   "bugs": {
-    "url": "https://github.com/YOUR_USERNAME/make-mine/issues"
+    "url": "https://github.com/bladnman/make-mine/issues"
   },
-  "homepage": "https://github.com/YOUR_USERNAME/make-mine#readme",
+  "homepage": "https://github.com/bladnman/make-mine#readme",
   "engines": {
     "node": ">=14.0.0"
   }
