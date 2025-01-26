@@ -1,0 +1,39 @@
+{
+  "name": "make-mine",
+  "version": "1.0.0",
+  "description": "CLI tool to clone and rename Git repositories with automatic name replacement",
+  "main": "bin/index.js",
+  "bin": {
+    "make-mine": "./bin/index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "cli",
+    "git",
+    "clone",
+    "template",
+    "scaffold",
+    "rename",
+    "project-generator",
+    "boilerplate"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^11.1.0",
+    "chalk": "^4.1.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YOUR_USERNAME/make-mine.git"
+  },
+  "bugs": {
+    "url": "https://github.com/YOUR_USERNAME/make-mine/issues"
+  },
+  "homepage": "https://github.com/YOUR_USERNAME/make-mine#readme",
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
