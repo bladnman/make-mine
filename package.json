@@ -1,6 +1,6 @@
 {
   "name": "make-mine",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "CLI tool to clone and rename Git repositories with automatic name replacement",
   "main": "bin/index.js",
   "bin": {
