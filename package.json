@@ -1,6 +1,6 @@
 {
   "name": "make-mine",
-  "version": "1.0.1",
+  "version": "1.0.5",
   "description": "CLI to create new projects from a template repository",
   "main": "bin/index.js",
   "bin": {
