@@ -1,13 +1,14 @@
 {
   "name": "make-mine",
-  "version": "1.0.4",
-  "description": "CLI tool to clone and rename Git repositories with automatic name replacement",
+  "version": "1.0.1",
+  "description": "CLI to create new projects from a template repository",
   "main": "bin/index.js",
   "bin": {
-    "make-mine": "bin/index.js"
+    "make-mine": "./bin/index.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node test-validate.js",
+    "test:watch": "nodemon test-validate.js"
   },
   "keywords": [
     "cli",
@@ -22,8 +23,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "commander": "^11.1.0",
-    "chalk": "^4.1.2"
+    "chalk": "^4.1.2",
+    "commander": "^11.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
   },
   "repository": {
     "type": "git",

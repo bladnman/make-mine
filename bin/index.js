@@ -5,6 +5,9 @@ const path = require('path');
 const { execSync } = require('child_process');
 const chalk = require('chalk');
 
+// Reserved token that cannot be used as a project name
+const PLACEHOLDER_PROJECT_NAME = 'TEMPLATE';
+
 function validateGitUrl(url) {
   // Basic git URL validation
   const gitUrlPattern = /^(https?:\/\/|git@)([^\s]+)(\.git)?$/;
@@ -20,6 +23,21 @@ function validateProjectName(name) {
   const startsWithPattern = /^[a-zA-Z0-9]/;
   
   if (name === '.') return name; // Allow "." for current directory
+  
+  // Check for placeholder pattern (text within angle brackets)
+  const placeholderPattern = /^<[^>]+>$/;
+  if (placeholderPattern.test(name)) {
+    const placeholderText = name.slice(1, -1); // Remove the angle brackets
+    throw new Error(
+      `"${name}" is a placeholder. Please replace it with your actual project name.\n` +
+      `Example: npx make-mine https://github.com/user/repo.git my-project-name`
+    );
+  }
+  
+  // Check for reserved token
+  if (name === PLACEHOLDER_PROJECT_NAME) {
+    throw new Error(`"${PLACEHOLDER_PROJECT_NAME}" is a reserved token and cannot be used as a project name`);
+  }
   
   if (!namePattern.test(name)) {
     throw new Error(
@@ -128,47 +146,59 @@ async function createProject(repoUrl, projectName) {
   }
 }
 
-// CLI configuration
-program
-  .name('make-mine')
-  .description('CLI to create new projects from a template repository')
-  .version('1.0.0')
-  .argument('<repo-url>', 'Git repository URL to clone from (e.g., https://github.com/user/repo.git)')
-  .argument('<project-name>', 'New name for your project (e.g., my-awesome-app, use hyphens instead of spaces)')
-  .usage('<repo-url> <project-name>')
-  .addHelpText('after', `
+// Export functions for testing
+if (require.main === module) {
+  // Only run the CLI if this file is being run directly
+  program
+    .name('make-mine')
+    .description('CLI to create new projects from a template repository')
+    .version('1.0.0')
+    .argument('<repo-url>', 'Git repository URL to clone from (e.g., https://github.com/user/repo.git)')
+    .argument('<project-name>', 'New name for your project (e.g., my-awesome-app, use hyphens instead of spaces)')
+    .usage('<repo-url> <project-name>')
+    .addHelpText('after', `
 Examples:
   $ make-mine https://github.com/user/repo.git my-new-project
   $ make-mine https://github.com/bladnman/vite-react-ts-mui-zustand.git my-cool-app
   $ mkdir my-app && cd my-app && make-mine https://github.com/user/repo.git .`)
-  .on('--help', () => {
-    console.log('\nNOTE: If your project name contains spaces, wrap it in quotes:');
-    console.log('  $ make-mine repo-url "my project name"');
-  });
+    .on('--help', () => {
+      console.log('\nNOTE: If your project name contains spaces, wrap it in quotes:');
+      console.log('  $ make-mine repo-url "my project name"');
+    });
 
-// Check for extra arguments before parsing
-const args = process.argv.slice(2);
-if (args.length > 2) {
-  console.error(chalk.red('Error: Too many arguments provided.'));
-  console.error(chalk.yellow('\nUse hyphens instead of spaces in your project name:'));
-  console.error(chalk.white('  $ make-mine repo-url my-project-name'));
-  console.error(chalk.white(`\nReceived arguments: ${args.join(', ')}`));
-  process.exit(1);
-}
+  // Check for extra arguments before parsing
+  const args = process.argv.slice(2);
+  if (args.length > 2) {
+    console.error(chalk.red('Error: Too many arguments provided.'));
+    console.error(chalk.yellow('\nUse hyphens instead of spaces in your project name:'));
+    console.error(chalk.white('  $ make-mine repo-url my-project-name'));
+    console.error(chalk.white(`\nReceived arguments: ${args.join(', ')}`));
+    process.exit(1);
+  }
 
-// Show help if no arguments provided
-if (args.length === 0) {
-  program.help();
-}
+  // Show help if no arguments provided
+  if (args.length === 0) {
+    program.help();
+  }
 
-program
-  .action((repoUrl, projectName) => {
-    if (!repoUrl || !projectName) {
-      console.error(chalk.red('Error: Both repository URL and project name are required'));
-      program.help();
-      process.exit(1);
-    }
-    createProject(repoUrl, projectName);
-  });
+  program
+    .action((repoUrl, projectName) => {
+      if (!repoUrl || !projectName) {
+        console.error(chalk.red('Error: Both repository URL and project name are required'));
+        program.help();
+        process.exit(1);
+      }
+      createProject(repoUrl, projectName);
+    });
 
-program.parse(); 
+  program.parse();
+} else {
+  // Export functions for testing
+  module.exports = {
+    validateGitUrl,
+    validateProjectName,
+    getTemplateNameFromRepo,
+    updateFileContent,
+    createProject
+  };
+} 
